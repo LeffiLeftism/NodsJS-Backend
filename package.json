@@ -1,0 +1,24 @@
+{
+  "name": "nodsjs_backend",
+  "version": "1.0.0",
+  "description": "Backend for roomacle to host database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeffiLeftism/NodsJS_Backend.git"
+  },
+  "author": "Alexander Leffringhausen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LeffiLeftism/NodsJS_Backend/issues"
+  },
+  "homepage": "https://github.com/LeffiLeftism/NodsJS_Backend#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nedb": "^1.8.0",
+    "nodemon": "^2.0.7"
+  }
+}
