@@ -2,13 +2,13 @@ const express = require('express');
 const app = express();
 const inputSite = express();
 
-//const portApp = 3000;
+const portApp = 3000;
 const portInputSite = 3001;
 
-/*
+
 app.listen(portApp, () => console.log('App listening at Port ' + portApp));
-app.use(express.static('public'));
-app.use(express.json({ limit: '1mb' }));*/
+app.use(express.static('roomacle'));
+app.use(express.json({ limit: '1mb' }));
 
 inputSite.listen(portInputSite, () => console.log('InputSite listening at Port ' + portInputSite));
 inputSite.use(express.static('input'));
@@ -109,6 +109,42 @@ inputSite.post('/send', (request, response) => {
 });
 
 inputSite.post('/recieve', (request, response) => {
+    console.log('Recieve inputSite, Port ' + portInputSite + ':');
+    const data = request.body;
+    if (data.type == "timings") {
+        timings.find({}).sort({ tStart: 1 }).exec(function (err, docs) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Send timings");
+                response.json(docs);
+            }
+        });
+    } else if (data.type == "meetings") {
+        meetings.find({}).sort({ num: 1 }).exec(function (err, docs) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Send meetings");
+                response.json(docs);
+            }
+        });
+    } else if(data.type == "persons"){
+        persons.find({}).exec(function (err, docs) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Send persons");
+                response.json(docs);
+            }
+        });
+    } else {
+        response.end();
+    }
+});
+
+
+app.post('/recieve', (request, response) => {
     console.log('Recieve inputSite, Port ' + portInputSite + ':');
     const data = request.body;
     if (data.type == "timings") {

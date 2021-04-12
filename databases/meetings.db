@@ -1,1 +1,3 @@
-{"id":0,"num":"1111","name":"Aufbaukurs C++","name_short":"iAufC","std_start":0,"duration":1,"date":{"start":"2021-04-01","repeatedly":1,"end":"","infinity":true},"dozent":"Januzaj, Visar","_id":"ANnKkF16L7Ch3OjL"}
+{"id":0,"num":"1111","name":"Test1 12.04-26.04","name_short":"T1","std_start":1,"duration":2,"date":{"start":"2021-04-12","repeatedly":1,"end":"2021-04-26","infinity":false},"dozent":"Alex1","_id":"5r4HeyMp1xu2HocV"}
+{"id":2,"num":"3333","name":"Test3 17.04-infinity","name_short":"T3","std_start":3,"duration":2,"date":{"start":"2021-04-19","repeatedly":1,"end":"2021-06-12","infinity":true},"dozent":"Alex3","_id":"IFX9BqDX0QmXOHdF"}
+{"id":1,"num":"2222","name":"Test2 12.04-26.04 2wö","name_short":"T2","std_start":3,"duration":4,"date":{"start":"2021-04-19","repeatedly":1,"end":"2021-05-04","infinity":false},"dozent":"Alex2","_id":"j2dzr7UWWVL041Zx"}
