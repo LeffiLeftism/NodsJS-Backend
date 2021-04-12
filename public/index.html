@@ -11,6 +11,7 @@
 <body>
     <h1>Dieser Server hört auf Port 3000.</h1>
     <button onclick="sendData()">Send Data</button>
+    <button onclick="countDB()">Count</button>
     <script>
         async function sendData() {
             console.log('Send Data');
@@ -27,9 +28,29 @@
             };
             const response = await fetch('/api', options);
             const json = await response.json();
-            console.log('Response:')
+            console.log('Response:');
             console.log(json);
-        }
+        };
+
+
+        async function countDB() {
+            let counts = {};
+            let response;
+            //console.log('Count DBs');
+            const options = {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            };
+            response = await fetch('/countTimings', options);
+            counts.timings = await response.json();
+            response = await fetch('/countMeetings', options);
+            counts.meetings = await response.json();
+            response = await fetch('/countPersons', options);
+            counts.persons = await response.json();
+            console.log(counts);
+        };
     </script>
 </body>
 
