@@ -26,6 +26,8 @@ meetings.loadDatabase();
 const persons = new Datastore('./databases/persons.db');
 persons.loadDatabase();
 
+const setup = new Datastore('./databases/setup.db');
+setup.loadDatabase();
 
 /*
 app.post('/api', (request, response) => {
@@ -71,7 +73,7 @@ inputSite.post('/send', (request, response) => {
             console.log("No timings recieved");
         } else {
             console.log("Got timings: ");
-            console.log(data);
+            console.log(data.timings);
             timings.remove({}, { multi: true }, function (err, numRemoved) {
 
             });
@@ -83,7 +85,7 @@ inputSite.post('/send', (request, response) => {
             console.log("No meetings recieved");
         } else {
             console.log("Got meetings: ");
-            console.log(data);
+            console.log(data.meetings);
             meetings.remove({}, { multi: true }, function (err, numRemoved) {
 
             });
@@ -95,12 +97,24 @@ inputSite.post('/send', (request, response) => {
             console.log("No persons recieved");
         } else {
             console.log("Got persons: ");
-            console.log(data);
+            console.log(data.persons);
             persons.remove({}, { multi: true }, function (err, numRemoved) {
 
             });
             persons.insert(data.persons);
             persons.loadDatabase();
+        }
+
+        if (data.setup == "") {
+            console.log("No setup recieved");
+        } else {
+            console.log("Got setup: ");
+            console.log(data.setup);
+            setup.remove({}, { multi: true }, function (err, numRemoved) {
+
+            });
+            setup.insert(data.setup);
+            setup.loadDatabase();
         }
     } else {
         console.log("Recieved no data.")
@@ -111,6 +125,7 @@ inputSite.post('/send', (request, response) => {
 inputSite.post('/recieve', (request, response) => {
     console.log('Recieve inputSite, Port ' + portInputSite + ':');
     const data = request.body;
+    console.log(data.type);
     if (data.type == "timings") {
         timings.find({}).sort({ tStart: 1 }).exec(function (err, docs) {
             if (err) {
@@ -138,7 +153,17 @@ inputSite.post('/recieve', (request, response) => {
                 response.json(docs);
             }
         });
+    } else if(data.type == "setup"){
+        setup.find({}).exec(function (err, docs) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Send setup");
+                response.json(docs);
+            }
+        });
     } else {
+        console.log("Wrong data.type!")
         response.end();
     }
 });
@@ -171,6 +196,15 @@ app.post('/recieve', (request, response) => {
                 console.log(err)
             } else {
                 console.log("Send persons");
+                response.json(docs);
+            }
+        });
+    } else if(data.type == "setup"){
+        setup.find({}).exec(function (err, docs) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Send setup");
                 response.json(docs);
             }
         });
