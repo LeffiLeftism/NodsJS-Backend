@@ -1,9 +1,11 @@
 const express = require('express');
 const app = express();
 const inputSite = express();
+const publicSite = express();
 
 const portApp = 3000;
 const portInputSite = 3001;
+const portPublic = 3002;
 
 
 app.listen(portApp, () => console.log('App listening at Port ' + portApp));
@@ -14,6 +16,9 @@ inputSite.listen(portInputSite, () => console.log('InputSite listening at Port '
 inputSite.use(express.static('input'));
 inputSite.use(express.json({ limit: '1mb' }));
 
+publicSite.listen(portPublic, () => console.log('Public listening at Port ' + portPublic));
+publicSite.use(express.static('public'));
+publicSite.use(express.json({ limit: '1mb' }));
 
 const Datastore = require('nedb');
 
@@ -28,6 +33,15 @@ persons.loadDatabase();
 
 const setup = new Datastore('./databases/setup.db');
 setup.loadDatabase();
+
+
+publicSite.post('/uploadFile', (req,res) => {
+    console.log(req);
+    res(req);
+})
+
+
+
 
 /*
 app.post('/api', (request, response) => {
