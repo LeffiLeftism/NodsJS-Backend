@@ -31,6 +31,12 @@ meetings.loadDatabase();
 const persons = new Datastore('./databases/persons.db');
 persons.loadDatabase();
 
+const announcements = new Datastore('./databases/announcements.db');
+announcements.loadDatabase();
+
+const lostandfounds = new Datastore('./databases/lostnadfound.db');
+lostandfounds.loadDatabase();
+
 const setup = new Datastore('./databases/setup.db');
 setup.loadDatabase();
 
@@ -119,6 +125,30 @@ inputSite.post('/send', (request, response) => {
             persons.loadDatabase();
         }
 
+        if (data.announcements == "") {
+            console.log("No announcements recieved");
+        } else {
+            console.log("Got announcements: ");
+            console.log(data.announcements);
+            announcements.remove({}, { multi: true }, function (err, numRemoved) {
+
+            });
+            announcements.insert(data.announcements);
+            announcements.loadDatabase();
+        }
+
+        if (data.lostandfounds == "") {
+            console.log("No lostandfounds recieved");
+        } else {
+            console.log("Got lostandfounds: ");
+            console.log(data.lostandfounds);
+            lostandfounds.remove({}, { multi: true }, function (err, numRemoved) {
+
+            });
+            lostandfounds.insert(data.lostandfounds);
+            lostandfounds.loadDatabase();
+        }
+
         if (data.setup == "") {
             console.log("No setup recieved");
         } else {
@@ -167,6 +197,24 @@ inputSite.post('/recieve', (request, response) => {
                 response.json(docs);
             }
         });
+    } else if(data.type == "announcements"){
+        announcements.find({}).exec(function (err, docs) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Send announcements");
+                response.json(docs);
+            }
+        });
+    } else if(data.type == "lostandfounds"){
+        lostandfounds.find({}).exec(function (err, docs) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Send lostandfounds");
+                response.json(docs);
+            }
+        });
     } else if(data.type == "setup"){
         setup.find({}).exec(function (err, docs) {
             if (err) {
@@ -186,6 +234,7 @@ inputSite.post('/recieve', (request, response) => {
 app.post('/recieve', (request, response) => {
     console.log('Recieve inputSite, Port ' + portInputSite + ':');
     const data = request.body;
+    console.log(data.type);
     if (data.type == "timings") {
         timings.find({}).sort({ tStart: 1 }).exec(function (err, docs) {
             if (err) {
@@ -213,6 +262,24 @@ app.post('/recieve', (request, response) => {
                 response.json(docs);
             }
         });
+    } else if(data.type == "announcements"){
+        announcements.find({}).exec(function (err, docs) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Send announcements");
+                response.json(docs);
+            }
+        });
+    } else if(data.type == "lostandfounds"){
+        lostandfounds.find({}).exec(function (err, docs) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Send lostandfounds");
+                response.json(docs);
+            }
+        });
     } else if(data.type == "setup"){
         setup.find({}).exec(function (err, docs) {
             if (err) {
@@ -223,6 +290,7 @@ app.post('/recieve', (request, response) => {
             }
         });
     } else {
+        console.log("Wrong data.type!")
         response.end();
     }
 });
