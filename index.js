@@ -34,14 +34,11 @@ persons.loadDatabase();
 const announcements = new Datastore('./databases/announcements.db');
 announcements.loadDatabase();
 
-const lostandfounds = new Datastore('./databases/lostnadfound.db');
-lostandfounds.loadDatabase();
-
 const setup = new Datastore('./databases/setup.db');
 setup.loadDatabase();
 
 
-publicSite.post('/uploadFile', (req,res) => {
+publicSite.post('/uploadFile', (req, res) => {
     console.log(req);
     res(req);
 })
@@ -137,18 +134,6 @@ inputSite.post('/send', (request, response) => {
             announcements.loadDatabase();
         }
 
-        if (data.lostandfounds == "") {
-            console.log("No lostandfounds recieved");
-        } else {
-            console.log("Got lostandfounds: ");
-            console.log(data.lostandfounds);
-            lostandfounds.remove({}, { multi: true }, function (err, numRemoved) {
-
-            });
-            lostandfounds.insert(data.lostandfounds);
-            lostandfounds.loadDatabase();
-        }
-
         if (data.setup == "") {
             console.log("No setup recieved");
         } else {
@@ -188,7 +173,7 @@ inputSite.post('/recieve', (request, response) => {
                 response.json(docs);
             }
         });
-    } else if(data.type == "persons"){
+    } else if (data.type == "persons") {
         persons.find({}).exec(function (err, docs) {
             if (err) {
                 console.log(err)
@@ -197,8 +182,8 @@ inputSite.post('/recieve', (request, response) => {
                 response.json(docs);
             }
         });
-    } else if(data.type == "announcements"){
-        announcements.find({}).exec(function (err, docs) {
+    } else if (data.type == "announcements") {
+        announcements.find({}).sort({ announcement: -1, date: -1, time: -1 }).exec(function (err, docs) {
             if (err) {
                 console.log(err)
             } else {
@@ -206,16 +191,7 @@ inputSite.post('/recieve', (request, response) => {
                 response.json(docs);
             }
         });
-    } else if(data.type == "lostandfounds"){
-        lostandfounds.find({}).exec(function (err, docs) {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log("Send lostandfounds");
-                response.json(docs);
-            }
-        });
-    } else if(data.type == "setup"){
+    } else if (data.type == "setup") {
         setup.find({}).exec(function (err, docs) {
             if (err) {
                 console.log(err)
@@ -253,7 +229,7 @@ app.post('/recieve', (request, response) => {
                 response.json(docs);
             }
         });
-    } else if(data.type == "persons"){
+    } else if (data.type == "persons") {
         persons.find({}).exec(function (err, docs) {
             if (err) {
                 console.log(err)
@@ -262,8 +238,8 @@ app.post('/recieve', (request, response) => {
                 response.json(docs);
             }
         });
-    } else if(data.type == "announcements"){
-        announcements.find({}).exec(function (err, docs) {
+    } else if (data.type == "announcements") {
+        announcements.find({}).sort({ announcement: -1, date: -1, time: -1 }).exec(function (err, docs) {
             if (err) {
                 console.log(err)
             } else {
@@ -271,16 +247,7 @@ app.post('/recieve', (request, response) => {
                 response.json(docs);
             }
         });
-    } else if(data.type == "lostandfounds"){
-        lostandfounds.find({}).exec(function (err, docs) {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log("Send lostandfounds");
-                response.json(docs);
-            }
-        });
-    } else if(data.type == "setup"){
+    } else if (data.type == "setup") {
         setup.find({}).exec(function (err, docs) {
             if (err) {
                 console.log(err)
