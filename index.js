@@ -183,7 +183,7 @@ inputSite.post('/recieve', (request, response) => {
             }
         });
     } else if (data.type == "announcements") {
-        announcements.find({}).sort({ announcement: -1, date: -1, time: -1 }).exec(function (err, docs) {
+        announcements.find({}).sort({ pinned: -1, date: 1, time: -1 }).exec(function (err, docs) {
             if (err) {
                 console.log(err)
             } else {
@@ -239,7 +239,7 @@ app.post('/recieve', (request, response) => {
             }
         });
     } else if (data.type == "announcements") {
-        announcements.find({}).sort({ announcement: -1, date: -1, time: -1 }).exec(function (err, docs) {
+        announcements.find({}).sort({ pinned: -1, date: -1, time: -1 }).exec(function (err, docs) {
             if (err) {
                 console.log(err)
             } else {
