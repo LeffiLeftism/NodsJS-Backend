@@ -174,7 +174,7 @@ inputSite.post('/recieve', (request, response) => {
             }
         });
     } else if (data.type == "persons") {
-        persons.find({}).exec(function (err, docs) {
+        persons.find({}).sort({ name: 1 }).exec(function (err, docs) {
             if (err) {
                 console.log(err)
             } else {
@@ -230,7 +230,7 @@ app.post('/recieve', (request, response) => {
             }
         });
     } else if (data.type == "persons") {
-        persons.find({}).exec(function (err, docs) {
+        persons.find({}).sort({ name: 1 }).exec(function (err, docs) {
             if (err) {
                 console.log(err)
             } else {
