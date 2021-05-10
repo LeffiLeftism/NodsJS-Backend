@@ -6,6 +6,7 @@ const publicSite = express();
 const portApp = 3000;
 const portInputSite = 3001;
 const portPublic = 3002;
+const PW = 'password';
 
 
 app.listen(portApp, () => console.log('App listening at Port ' + portApp));
@@ -79,7 +80,65 @@ app.get('/countPersons', (req, res) => {
     });
 });*/
 
+function recieve(request, response) {
+    const data = request.body;
+    console.log(data.type);
+    if (data.type == "timings") {
+        timings.find({}).sort({ tStart: 1 }).exec(function (err, docs) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Send timings");
+                response.json(docs);
+            }
+        });
+    } else if (data.type == "meetings") {
+        meetings.find({}).sort({ num: 1 }).exec(function (err, docs) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Send meetings");
+                response.json(docs);
+            }
+        });
+    } else if (data.type == "persons") {
+        persons.find({}).sort({ name: 1 }).exec(function (err, docs) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Send persons");
+                response.json(docs);
+            }
+        });
+    } else if (data.type == "announcements") {
+        announcements.find({}).sort({ pinned: -1, date: -1, time: -1 }).exec(function (err, docs) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Send announcements");
+                response.json(docs);
+            }
+        });
+    } else if (data.type == "setup") {
+        setup.find({}).exec(function (err, docs) {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Send setup");
+                response.json(docs);
+            }
+        });
+    } else {
+        console.log("Wrong data.type!")
+        response.end();
+    }
 
+}
+
+inputSite.post('/recieve', (request, response) => {
+    console.log('Recieve inputSite, Port ' + portInputSite + ':');
+    recieve(request, response);
+});
 
 inputSite.post('/send', (request, response) => {
     console.log('Send inputSite, Port ' + portInputSite + ':');
@@ -151,113 +210,22 @@ inputSite.post('/send', (request, response) => {
     response.json(data);
 });
 
-inputSite.post('/recieve', (request, response) => {
-    console.log('Recieve inputSite, Port ' + portInputSite + ':');
-    const data = request.body;
-    console.log(data.type);
-    if (data.type == "timings") {
-        timings.find({}).sort({ tStart: 1 }).exec(function (err, docs) {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log("Send timings");
-                response.json(docs);
-            }
-        });
-    } else if (data.type == "meetings") {
-        meetings.find({}).sort({ num: 1 }).exec(function (err, docs) {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log("Send meetings");
-                response.json(docs);
-            }
-        });
-    } else if (data.type == "persons") {
-        persons.find({}).sort({ name: 1 }).exec(function (err, docs) {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log("Send persons");
-                response.json(docs);
-            }
-        });
-    } else if (data.type == "announcements") {
-        announcements.find({}).sort({ pinned: -1, date: 1, time: -1 }).exec(function (err, docs) {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log("Send announcements");
-                response.json(docs);
-            }
-        });
-    } else if (data.type == "setup") {
-        setup.find({}).exec(function (err, docs) {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log("Send setup");
-                response.json(docs);
-            }
-        });
-    } else {
-        console.log("Wrong data.type!")
-        response.end();
-    }
-});
-
 
 app.post('/recieve', (request, response) => {
-    console.log('Recieve inputSite, Port ' + portInputSite + ':');
+    console.log('Recieve app, Port ' + portApp + ':');
+    recieve(request, response);
+});
+
+app.post('/pw', (request, response) => {
+    console.log('Recieve inputSite, Port ' + portApp + ':');
     const data = request.body;
-    console.log(data.type);
-    if (data.type == "timings") {
-        timings.find({}).sort({ tStart: 1 }).exec(function (err, docs) {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log("Send timings");
-                response.json(docs);
-            }
-        });
-    } else if (data.type == "meetings") {
-        meetings.find({}).sort({ num: 1 }).exec(function (err, docs) {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log("Send meetings");
-                response.json(docs);
-            }
-        });
-    } else if (data.type == "persons") {
-        persons.find({}).sort({ name: 1 }).exec(function (err, docs) {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log("Send persons");
-                response.json(docs);
-            }
-        });
-    } else if (data.type == "announcements") {
-        announcements.find({}).sort({ pinned: -1, date: -1, time: -1 }).exec(function (err, docs) {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log("Send announcements");
-                response.json(docs);
-            }
-        });
-    } else if (data.type == "setup") {
-        setup.find({}).exec(function (err, docs) {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log("Send setup");
-                response.json(docs);
-            }
-        });
+    console.log(data);
+    if (data.input == PW) {
+        console.log('Correct Password');
+        response.json('correct password');
     } else {
-        console.log("Wrong data.type!")
-        response.end();
+        console.log('Wrong Password');
+        response.json('wrong password');
     }
+    response.end();
 });
