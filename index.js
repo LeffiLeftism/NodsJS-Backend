@@ -21,6 +21,7 @@ publicSite.listen(portPublic, () => console.log('Public listening at Port ' + po
 publicSite.use(express.static('public'));
 publicSite.use(express.json({ limit: '1mb' }));
 
+
 const Datastore = require('nedb');
 
 const timings = new Datastore('./databases/timings.db');
@@ -38,47 +39,14 @@ announcements.loadDatabase();
 const setup = new Datastore('./databases/setup.db');
 setup.loadDatabase();
 
+const testdb = new Datastore('./databases/test.db');
+testdb.loadDatabase();
+
 
 publicSite.post('/uploadFile', (req, res) => {
     console.log(req);
     res(req);
 })
-
-
-
-
-/*
-app.post('/api', (request, response) => {
-    console.log('On app, Port ' + portApp + ':');
-    console.log(request.body);
-    const data = request.body;
-    const timestamp = Date.now();
-    data.timestamp = timestamp;
-    data.status = "success";
-    timings.insert(data);
-    response.json(data);
-});
-
-app.get('/countTimings', (req, res) => {
-    console.log('New Request');
-    timings.count({}, function (err, count) {
-        res.json(count);
-    });
-});
-
-app.get('/countMeetings', (req, res) => {
-    console.log('New Request');
-    meetings.count({}, function (err, count) {
-        res.json(count);
-    });
-});
-
-app.get('/countPersons', (req, res) => {
-    console.log('New Request');
-    persons.count({}, function (err, count) {
-        res.json(count);
-    });
-});*/
 
 function recieve(request, response) {
     const data = request.body;
@@ -93,7 +61,7 @@ function recieve(request, response) {
             }
         });
     } else if (data.type == "meetings") {
-        meetings.find({}).sort({ num: 1 }).exec(function (err, docs) {
+        meetings.find({}).sort({ std_start: 1 }).exec(function (err, docs) {
             if (err) {
                 console.log(err)
             } else {
@@ -216,8 +184,8 @@ app.post('/recieve', (request, response) => {
     recieve(request, response);
 });
 
-app.post('/pw', (request, response) => {
-    console.log('Recieve inputSite, Port ' + portApp + ':');
+inputSite.post('/pw', (request, response) => {
+    console.log('Recieve inputSite, Port ' + portInputSite + ':');
     const data = request.body;
     console.log(data);
     if (data.input == PW) {
@@ -228,4 +196,25 @@ app.post('/pw', (request, response) => {
         response.json('wrong password');
     }
     response.end();
+});
+
+
+inputSite.post('/testImg', (request, response) => {
+    console.log('Recieve inputSite, Port ' + portInputSite + ':');
+    const data = request.body;
+    testdb.insert(request.body);
+    console.log(data);
+    response.json("Success");
+});
+
+inputSite.post('/readImg', (request, response) => {
+    console.log('Recieve inputSite, Port ' + portInputSite + ':');
+    testdb.find({}).sort({ tStart: 1 }).exec(function (err, docs) {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log("Send Image");
+            response.json(docs[0]);
+        }
+    });
 });

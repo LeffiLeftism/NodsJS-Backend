@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beispiel JavaScript</title>
+</head>
+
+<body>
+    <h1>JavaScript Beispiel</h1>
+    <b>Bitte geben Sie Zahlen zwischen 1 und 10 an.</b>
+    <br>
+    <div style="display: flex;">
+        <div style="margin: 0 10px 0 0;">
+            <label for="eingabe1">Zahl a: </label>
+            <br>
+            <label for="eingabe2">Zahl b: </label>
+        </div>
+        <div>
+            <input type="number" name="eingabe1" id="eingabe1" min="1" max="10">
+            <br>
+            <input type="number" name="eingabe2" id="eingabe2" min="1" max="10">
+        </div>
+    </div>
+    <br>
+    <br>
+    <button onclick="berechnen()">Berechnen</button>
+    <span id="fehler"></span>
+    <h3>Ergebnisse:</h3>
+    <div style="display: flex;">
+        <div id="ergebnisseLabel">
+            <span>Ergebnis von a+b: </span>
+            <br>
+            <span>Ergebnis von a*b: </span>
+            <br>
+            <span>Ergebnis von a hoch b: </span>
+        </div>
+        <div id="ergebnisse">
+            <span id="ergebnis1"></span>
+            <br>
+            <span id="ergebnis2"></span>
+            <br>
+            <span id="ergebnis3"></span>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<style>
+    h1 {
+        text-decoration: underline;
+    }
+
+    #ergebnisse {
+        margin: 0 10px;
+        padding: 0 10px;
+        border: black 2px solid;
+        width: 150px;
+    }
+
+    #fehler {
+        margin: 0 10px;
+        color: red;
+        font-weight: bolder;
+    }
+</style>
+
+<script>
+    function berechnen() {
+        var a = Number(document.getElementById('eingabe1').value);
+        var b = Number(document.getElementById('eingabe2').value);
+        if (a == '' || b == '') {
+            document.getElementById('fehler').innerText = "Eingaben nicht korrekt!";
+            console.log('FEHLER')
+        } else {
+            document.getElementById('fehler').innerText = "";
+            document.getElementById('ergebnis1').innerHTML = a + b;;
+            document.getElementById('ergebnis2').innerText = a * b;;
+            document.getElementById('ergebnis3').innerText = Math.pow(a, b);
+        }
+        sendData();
+    }
+
+    async function sendData() {
+        var data = {
+            "stadt": "Frankfurt a.M.",
+            "einwohner": 753056,
+            "personen": [
+                {
+                    "vorname": "Herbert",
+                    "nachname": "Smith",
+                    "alter": 36
+                },
+                {
+                    "vorname": "Sabine",
+                    "nachname": "Müller",
+                    "alter": 27
+                }
+            ]
+        };
+        console.log(data);
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        };
+        const response = await fetch("/test", options);
+        const json = await response.json();
+        console.log("Response:");
+        console.log(json);
+    }
+</script>
