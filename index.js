@@ -1,21 +1,21 @@
 const express = require('express');
-const roomacle = express();
-const inputSite = express();
+const frontend1 = express();
+const frontend2 = express();
 
-const portRoomacle = 3000;
-const portInputSite = 3001;
+const portfrontend1 = 3000;
+const portfrontend2 = 3001;
 
 
 const PW = 'password';
 
 
-roomacle.listen(portRoomacle, () => console.log('roomacle listening at Port ' + portRoomacle));
-roomacle.use(express.static('roomacle'));
-roomacle.use(express.json({ limit: '10mb' }));
+frontend1.listen(portfrontend1, () => console.log('frontend1 listening at Port ' + portfrontend1));
+frontend1.use(express.static('frontend1'));
+frontend1.use(express.json({ limit: '10mb' }));
 
-inputSite.listen(portInputSite, () => console.log('InputSite listening at Port ' + portInputSite));
-inputSite.use(express.static('input'));
-inputSite.use(express.json({ limit: '10mb' }));
+frontend2.listen(portfrontend2, () => console.log('frontend2 listening at Port ' + portfrontend2));
+frontend2.use(express.static('frontend2'));
+frontend2.use(express.json({ limit: '10mb' }));
 
 const Datastore = require('nedb');
 
@@ -33,9 +33,6 @@ announcements.loadDatabase();
 
 const setup = new Datastore('./databases/setup.db');
 setup.loadDatabase();
-
-const testdb = new Datastore('./databases/test.db');
-testdb.loadDatabase();
 
 
 function recieve(request, response) {
@@ -93,18 +90,18 @@ function recieve(request, response) {
 
 }
 
-roomacle.post('/recieve', (request, response) => {
-    console.log('Recieve roomacle, Port ' + portRoomacle + ':');
+frontend1.post('/recieve', (request, response) => {
+    console.log('Recieve frontend1, Port ' + portfrontend1 + ':');
     recieve(request, response);
 });
 
-inputSite.post('/recieve', (request, response) => {
-    console.log('Recieve inputSite, Port ' + portInputSite + ':');
+frontend2.post('/recieve', (request, response) => {
+    console.log('Recieve frontend2, Port ' + portfrontend2 + ':');
     recieve(request, response);
 });
 
-inputSite.post('/send', (request, response) => {
-    console.log('Send inputSite, Port ' + portInputSite + ':');
+frontend2.post('/send', (request, response) => {
+    console.log('Send frontend2, Port ' + portfrontend2 + ':');
     const data = request.body;
     console.log(request);
     if (data != "") {
@@ -173,8 +170,8 @@ inputSite.post('/send', (request, response) => {
     response.json(data);
 });
 
-inputSite.post('/pw', (request, response) => {
-    console.log('Recieve inputSite, Port ' + portInputSite + ':');
+frontend2.post('/pw', (request, response) => {
+    console.log('Recieve frontend2, Port ' + portfrontend2 + ':');
     const data = request.body;
     console.log(data);
     if (data.input == PW) {

@@ -1,4 +1,4 @@
 /node_modules
-/input
-/roomacle
-/databases
+databases/persons.db
+databases/meetings.db
+databases/announcements.db
