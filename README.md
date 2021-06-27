@@ -1,27 +1,18 @@
 # NODSJS_Backend
 
 ## Project setup
+
+Install NodeJS from [NodeJS-Website](https://nodejs.org/en/)
+
+
 Go to your project directory and follow these steps:
 
+Update/Install Dependencies
 ```
 npm install
 ```
-Install NodeJS from [NodeJS-Website](https://nodejs.org/en/)
 
-Generate ur package.json File
+Run Backend
 ```
-npm init
+node index.js
 ```
-Install the "express" package
-```
-npm install express
-```
-Install the "nodemon" package
-```
-npm install -g nodemon
-```
-Install the "nedb" package
-```
-npm install nedb
-```
-
