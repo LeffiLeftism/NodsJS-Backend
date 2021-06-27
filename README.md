@@ -16,3 +16,5 @@ Run Backend
 ```
 node index.js
 ```
+Basic password for Frontend 2: "password"
+Can be changed in index.js
