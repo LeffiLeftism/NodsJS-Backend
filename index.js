@@ -66,7 +66,7 @@ function recieve(request, response) {
             }
         });
     } else if (data.type == "announcements") {
-        announcements.find({}).sort({ pinned: -1, date: -1, time: -1 }).exec(function (err, docs) {
+        announcements.find({}).sort({ pinned: -1, timerActive: -1, date: -1, time: -1 }).exec(function (err, docs) {
             if (err) {
                 console.log(err)
             } else {
